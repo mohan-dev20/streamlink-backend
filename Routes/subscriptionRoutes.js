@@ -1,0 +1,12 @@
+import express from "express";
+import { subscribeChannel,unsubscribeChannel,getSubscriberCount,getuserSubscriptions,checkSubscription } from "../Controllers/subscriptionController.js";
+const router =express.Router();
+router.post("/subscribe",subscribeChannel);
+router.delete("/unsubscribe",unsubscribeChannel);
+router.get("/", async (req, res) => {const subscriptions =await Subscription.find(); 
+    res.json(subscriptions);
+});
+router.get("/count/:channelId",getSubscriberCount);
+router.get("/user/:userId",getuserSubscriptions);
+router.post("/check", checkSubscription);
+export default router;
