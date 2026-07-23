@@ -15,7 +15,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import historyRoutes from "./Routes/historyRoutes.js";
 import RazorpayRoutes from "./Routes/RazorpayRoutes.js";
-import UserRoutes from "./Routes/UserRoutes.js";
+import userRoutes from "./Routes/userRoutes.js";
 import downloadRoutes from "./Routes/downloadRoutes.js";
 
 dotenv.config()
