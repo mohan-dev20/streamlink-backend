@@ -1,6 +1,6 @@
 import express from "express";
 import Download from "../Modals/Download.js";
-import auth from "../middleware/auth.js";
+import auth from "../Middleware/auth.js";
 
 const router = express.Router();
 
