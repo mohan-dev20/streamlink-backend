@@ -1,6 +1,5 @@
 import express, { Router } from "express";
 import { addComment,getComments,dislikeComment,likeComment,deleteComment,editComment } from "../Controllers/commentController.js";
-import { Route } from "lucide-react";
 const router=express.Router();
 router.post("/",addComment);
 router.get("/:videoId",getComments);
