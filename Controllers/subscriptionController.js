@@ -79,13 +79,17 @@ export const getSubscriberCount = async (req, res) => {
 export const getuserSubscriptions = async (req, res) => {
   try {
     const subscriptions = await Subscription.find({
-      subscriberId: req.params.userId,
-    }).populate(
-      "channelId",
-      "username profilePic subscribers"
-    );
+  subscriberId: req.params.userId,
+}).populate(
+  "channelId",
+  "username profilePic subscribers"
+);
 
-    res.status(200).json(subscriptions);
+const validSubscriptions = subscriptions.filter(
+  (sub) => sub.channelId
+);
+
+res.status(200).json(validSubscriptions);
   } catch (error) {
     res.status(500).json({
       message: error.message,

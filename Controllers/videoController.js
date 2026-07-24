@@ -1,6 +1,7 @@
 import Video from "../Modals/video.js";
 import fs from "fs";
 import path from "path";
+import { uploadToCloudinary } from "../Utils/cloudinaryUpload.js";
 
 export const getVideos = async (req, res) => {
   try {
@@ -16,15 +17,45 @@ export const uploadVideo = async (req, res) => {
   try {
     const { title, description, category, duration, userId } = req.body;
 
-    const videoUrl = `/uploads/videos/${req.files.video[0].filename}`;
+    if (!req.files?.video || !req.files?.thumbnail) {
+      return res.status(400).json({
+        success: false,
+        message: "Video and Thumbnail are required",
+      });
+    }
 
-    const thumbnailUrl = `/uploads/thumbnails/${req.files.thumbnail[0].filename}`;
+    const uploadedVideo = await uploadToCloudinary(
+      req.files.video[0].buffer,
+      "streamlink/videos",
+      "video"
+    );
+
+    const uploadedThumbnail = await uploadToCloudinary(
+      req.files.thumbnail[0].buffer,
+      "streamlink/thumbnails",
+      "image"
+    );
 
     const views = Math.floor(Math.random() * 50000) + 500;
-
     const likes = Math.floor(views * (Math.random() * 0.08 + 0.03));
-
     const comments = Math.floor(likes * (Math.random() * 0.05 + 0.02));
+
+    const video = await Video.create({
+      title,
+      description,
+      category,
+      duration,
+      userId,
+
+      videoUrl: uploadedVideo.secure_url,
+      thumbnailUrl: uploadedThumbnail.secure_url,
+
+      views,
+      likes,
+      comments,
+      downloads: 0,
+      dislikes: 0,
+    });
 
     res.status(201).json({
       success: true,
@@ -34,6 +65,7 @@ export const uploadVideo = async (req, res) => {
     console.log(error);
 
     res.status(500).json({
+      success: false,
       message: error.message,
     });
   }
