@@ -141,27 +141,6 @@ export const deleteVideo = async (req, res) => {
       });
     }
 
-    if (video.videoUrl) {
-      const videoPath = path.join(
-        process.cwd(),
-        video.videoUrl.replace(/^\/+/, ""),
-      );
-
-      if (fs.existsSync(videoPath)) {
-        fs.unlinkSync(videoPath);
-      }
-    }
-
-    if (video.thumbnailUrl) {
-      const thumbnailPath = path.join(
-        process.cwd(),
-        video.thumbnailUrl.replace(/^\/+/, ""),
-      );
-
-      if (fs.existsSync(thumbnailPath)) {
-        fs.unlinkSync(thumbnailPath);
-      }
-    }
 
     await Video.findByIdAndDelete(req.params.id);
 
