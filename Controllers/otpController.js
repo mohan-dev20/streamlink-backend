@@ -1,5 +1,6 @@
 import Otp from "../Modals/Otp.js";
-import resend from "../Utils/resend.js";
+import { resend } from "../Utils/resend.js";
+
 export const sendOtp = async (req, res) => {
   console.log("====== OTP REQUEST RECEIVED ======");
   console.log(req.body);
@@ -20,13 +21,6 @@ export const sendOtp = async (req, res) => {
 
     console.log("EMAIL USER:", process.env.EMAIL_USER);
 
-  await resend.emails.send({
-  from: "StreamLink <onboarding@resend.dev>",
-  to: email,
-  subject: "🔐 Your StreamLink Verification Code",
-  html,
-});
-console.log(response);
     const html = `
 <div style="font-family:Arial,sans-serif;background:#f4f7fb;padding:40px;">
 
@@ -151,8 +145,8 @@ support@streamlink.com
 
 </div>
 `;
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await resend.emails.send({
+      from: "StreamLink <onboarding@resend.dev>",
       to: email,
       subject: "🔐 Your StreamLink Verification Code",
       html,
