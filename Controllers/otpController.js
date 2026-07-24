@@ -2,6 +2,8 @@ import Otp from "../Modals/Otp.js";
 import nodemailer from "nodemailer";
 
 export const sendOtp = async (req, res) => {
+  console.log("====== OTP REQUEST RECEIVED ======");
+  console.log(req.body);
   try {
     const { email } = req.body;
 
@@ -17,13 +19,22 @@ export const sendOtp = async (req, res) => {
       expiresAt: new Date(Date.now() + 5 * 60 * 1000),
     });
 
+    console.log("EMAIL USER:", process.env.EMAIL_USER);
+
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
+      connectionTimeout: 10000,
     });
+
+    await transporter.verify();
+
+    console.log("SMTP Connected Successfully");
     const html = `
 <div style="font-family:Arial,sans-serif;background:#f4f7fb;padding:40px;">
 
@@ -160,7 +171,10 @@ support@streamlink.com
       message: "OTP Sent",
     });
   } catch (error) {
+    console.error("OTP ERROR:", error);
+
     res.status(500).json({
+      success: false,
       message: error.message,
     });
   }
@@ -198,12 +212,10 @@ export const verifyOtp = async (req, res) => {
       _id: record._id,
     });
 
-
     return res.json({
       success: true,
       message: "OTP Verified",
     });
-
   } catch (error) {
     console.log(error);
 
