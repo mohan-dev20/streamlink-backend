@@ -1,4 +1,5 @@
 import User from "../Modals/Auth.js";
+import { uploadToCloudinary } from "../Utils/cloudinaryUpload.js";
 
 export const updateProfile = async (req, res) => {
   try {
@@ -10,9 +11,14 @@ export const updateProfile = async (req, res) => {
       city,
     };
 
-    if (req.file) {
-      updateData.profilePic = `/uploads/profile/${req.file.filename}`;
-    }
+   if (req.file) {
+  const uploaded = await uploadToCloudinary(
+    req.file.buffer,
+    "streamlink/profile"
+  );
+
+  updateData.profilePic = uploaded.secure_url;
+}
 
     const user = await User.findByIdAndUpdate(
       req.params.id,
