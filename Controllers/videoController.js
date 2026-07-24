@@ -14,6 +14,7 @@ export const getVideos = async (req, res) => {
   }
 };
 export const uploadVideo = async (req, res) => {
+  console.log("✅ NEW CLOUDINARY UPLOAD CONTROLLER RUNNING");
   try {
     const { title, description, category, duration, userId } = req.body;
 
