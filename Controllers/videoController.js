@@ -17,23 +17,16 @@ export const uploadVideo = async (req, res) => {
   try {
     const { title, description, category, duration, userId } = req.body;
 
-    if (!req.files?.video || !req.files?.thumbnail) {
-      return res.status(400).json({
-        success: false,
-        message: "Video and Thumbnail are required",
-      });
-    }
-
+    // Upload video
     const uploadedVideo = await uploadToCloudinary(
       req.files.video[0].buffer,
-      "streamlink/videos",
-      "video"
+      "streamlink/videos"
     );
 
+    // Upload thumbnail
     const uploadedThumbnail = await uploadToCloudinary(
       req.files.thumbnail[0].buffer,
-      "streamlink/thumbnails",
-      "image"
+      "streamlink/thumbnails"
     );
 
     const views = Math.floor(Math.random() * 50000) + 500;
@@ -53,16 +46,17 @@ export const uploadVideo = async (req, res) => {
       views,
       likes,
       comments,
-      downloads: 0,
       dislikes: 0,
+      downloads: 0,
     });
 
     res.status(201).json({
       success: true,
       video,
     });
+
   } catch (error) {
-    console.log(error);
+    console.log("UPLOAD ERROR:", error);
 
     res.status(500).json({
       success: false,
