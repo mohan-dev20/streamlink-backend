@@ -1,6 +1,5 @@
 import Otp from "../Modals/Otp.js";
 import transporter from "../Utils/mailer.js";
-
 export const sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
@@ -101,6 +100,51 @@ support@streamlink.com
 
   } catch (error) {
     console.error("OTP ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+export const verifyOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    const record = await Otp.findOne({ email });
+
+    if (!record) {
+      return res.status(400).json({
+        success: false,
+        message: "OTP Not Found",
+      });
+    }
+
+    if (new Date() > record.expiresAt) {
+      return res.status(400).json({
+        success: false,
+        message: "OTP Expired",
+      });
+    }
+
+    if (record.otp.trim() !== otp.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid OTP",
+      });
+    }
+
+    await Otp.deleteOne({
+      _id: record._id,
+    });
+
+    return res.json({
+      success: true,
+      message: "OTP Verified",
+    });
+
+  } catch (error) {
+    console.log(error);
 
     return res.status(500).json({
       success: false,
