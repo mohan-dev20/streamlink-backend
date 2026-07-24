@@ -1,5 +1,5 @@
 import Otp from "../Modals/Otp.js";
-import { resend } from "../Utils/resend.js";
+import resend from "../Utils/resend.js";
 
 export const sendOtp = async (req, res) => {
   console.log("====== OTP REQUEST RECEIVED ======");
