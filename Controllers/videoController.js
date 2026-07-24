@@ -1,7 +1,6 @@
 import Video from "../Modals/video.js";
 import fs from "fs";
 import path from "path";
-import { uploadToCloudinary } from "../Utils/cloudinaryUpload.js";
 
 export const getVideos = async (req, res) => {
   try {
@@ -27,6 +26,7 @@ export const uploadVideo = async (req, res) => {
 
     const views = Math.floor(Math.random() * 50000) + 500;
     const likes = Math.floor(views * (Math.random() * 0.08 + 0.03));
+    const comments = Math.floor(likes * (Math.random() * 0.05 + 0.02));
 
     const video = await Video.create({
       title,
@@ -34,10 +34,13 @@ export const uploadVideo = async (req, res) => {
       category,
       duration,
       userId,
+
       videoUrl,
       thumbnailUrl,
+
       views,
       likes,
+      comments,
       dislikes: 0,
       downloads: 0,
     });
@@ -46,13 +49,12 @@ export const uploadVideo = async (req, res) => {
       success: true,
       video,
     });
-
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
 
     res.status(500).json({
       success: false,
-      message: err.message,
+      message: error.message,
     });
   }
 };

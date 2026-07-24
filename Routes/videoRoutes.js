@@ -1,5 +1,4 @@
 import express from "express";
-import upload from "../Middleware/upload.js";
 import { uploadVideo,getVideos,getVideoById,likeVideo,dislikeVideo,downloadVideo, getUserVideos, deleteVideo, increaseViews } from "../Controllers/videoController.js";
 
 const router = express.Router();

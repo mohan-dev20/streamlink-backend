@@ -1,9 +1,12 @@
 import multer from "multer";
 
-const storage = multer.memoryStorage();
-
-const upload = multer({
-  storage,
+const storage = multer.diskStorage({
+  destination: "uploads/",
+  filename(req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
 });
 
-export default upload;
+export default multer({
+  storage,
+});

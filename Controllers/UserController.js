@@ -12,10 +12,19 @@ export const updateProfile = async (req, res) => {
     };
 
    if (req.file) {
-  const uploaded = await uploadToCloudinary(
-    req.file.buffer,
-    "streamlink/profile"
-  );
+  const uploadedVideo = await cloudinary.uploader.upload(
+  req.files.video[0].path,
+  {
+    resource_type: "video",
+    folder: "streamlink/videos",
+  }
+);
+const uploadedThumbnail = await cloudinary.uploader.upload(
+  req.files.thumbnail[0].path,
+  {
+    folder: "streamlink/thumbnails",
+  }
+);
 
   updateData.profilePic = uploaded.secure_url;
 }
