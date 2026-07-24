@@ -4,7 +4,7 @@ import { uploadVideo,getVideos,getVideoById,likeVideo,dislikeVideo,downloadVideo
 
 const router = express.Router();
 
-router.post("/upload",upload.fields([{ name: "video", maxCount: 1 }, {name: "thumbnail", maxCount: 1 },]),uploadVideo );
+router.post("/upload",uploadVideo );
 router.get("/",getVideos);
 router.get("/:id",getVideoById)
 router.put("/:id/like",likeVideo);

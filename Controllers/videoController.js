@@ -14,25 +14,19 @@ export const getVideos = async (req, res) => {
   }
 };
 export const uploadVideo = async (req, res) => {
-  console.log("✅ NEW CLOUDINARY UPLOAD CONTROLLER RUNNING");
   try {
-    const { title, description, category, duration, userId } = req.body;
-
-    // Upload video
-    const uploadedVideo = await uploadToCloudinary(
-      req.files.video[0].buffer,
-      "streamlink/videos"
-    );
-
-    // Upload thumbnail
-    const uploadedThumbnail = await uploadToCloudinary(
-      req.files.thumbnail[0].buffer,
-      "streamlink/thumbnails"
-    );
+    const {
+      title,
+      description,
+      category,
+      duration,
+      userId,
+      videoUrl,
+      thumbnailUrl,
+    } = req.body;
 
     const views = Math.floor(Math.random() * 50000) + 500;
     const likes = Math.floor(views * (Math.random() * 0.08 + 0.03));
-    const comments = Math.floor(likes * (Math.random() * 0.05 + 0.02));
 
     const video = await Video.create({
       title,
@@ -40,13 +34,10 @@ export const uploadVideo = async (req, res) => {
       category,
       duration,
       userId,
-
-      videoUrl: uploadedVideo.secure_url,
-      thumbnailUrl: uploadedThumbnail.secure_url,
-
+      videoUrl,
+      thumbnailUrl,
       views,
       likes,
-      comments,
       dislikes: 0,
       downloads: 0,
     });
@@ -56,12 +47,12 @@ export const uploadVideo = async (req, res) => {
       video,
     });
 
-  } catch (error) {
-    console.log("UPLOAD ERROR:", error);
+  } catch (err) {
+    console.log(err);
 
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: err.message,
     });
   }
 };
