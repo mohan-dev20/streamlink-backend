@@ -1,37 +1,15 @@
-import apiInstance from "../Utils/brevo.js";
-import * as brevo from "@getbrevo/brevo";
+import transporter from "../Utils/mailer.js";
 
 export const sendInvoiceEmail = async (req, res) => {
   try {
     const { email, plan, amount } = req.body;
 
-    const emailData = new brevo.SendSmtpEmail();
-
-    emailData.subject = `${plan} Plan Activated`;
-
-    emailData.sender = {
-      name: "StreamLink",
-      email: process.env.EMAIL_USER,
-    };
-
-    emailData.to = [
-      {
-        email,
-      },
-    ];
-
-    emailData.htmlContent = `
-      <h2>Payment Successful</h2>
-
-      <p><b>Plan:</b> ${plan}</p>
-
-      <p><b>Amount:</b> ₹${amount}</p>
-
-      <p>Thank you for upgrading to StreamLink Premium.</p>
-    `;
-
-    await apiInstance.sendTransacEmail(emailData);
-
+    await transporter.sendMail({
+  from: `"StreamLink" <${process.env.EMAIL_USER}>`,
+  to: email,
+  subject: `🎉 ${plan} Plan Activated`,
+  html,
+});
     res.json({
       success: true,
     });

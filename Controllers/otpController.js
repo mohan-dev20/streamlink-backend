@@ -1,7 +1,5 @@
 import Otp from "../Modals/Otp.js";
-import apiInstance from "../Utils/brevo.js";
-import * as brevo from "@getbrevo/brevo";
-
+import transporter from "../Utils/mailer.js";
 export const sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
@@ -44,25 +42,12 @@ export const sendOtp = async (req, res) => {
       </div>
     </div>
     `;
-
-    const emailData = new brevo.SendSmtpEmail();
-
-    emailData.subject = "🔐 StreamLink Verification OTP";
-
-    emailData.htmlContent = html;
-
-    emailData.sender = {
-      name: "StreamLink",
-      email: process.env.EMAIL_USER,
-    };
-
-    emailData.to = [
-      {
-        email,
-      },
-    ];
-
-    await apiInstance.sendTransacEmail(emailData);
+await transporter.sendMail({
+  from: `"StreamLink" <${process.env.EMAIL_USER}>`,
+  to: email,
+  subject: "🔐 StreamLink Verification OTP",
+  html,
+});
 
     res.json({
       success: true,
