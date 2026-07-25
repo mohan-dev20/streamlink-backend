@@ -7,7 +7,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const uploadToCloudinary = (
+const uploadToCloudinary = (
   buffer,
   folder,
   resourceType = "auto"
@@ -19,14 +19,13 @@ export const uploadToCloudinary = (
         resource_type: resourceType,
       },
       (error, result) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(result);
-        }
+        if (error) return reject(error);
+        resolve(result);
       }
     );
 
     streamifier.createReadStream(buffer).pipe(stream);
   });
 };
+
+export default uploadToCloudinary;
