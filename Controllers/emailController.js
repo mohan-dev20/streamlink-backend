@@ -11,7 +11,7 @@ export const sendInvoiceEmail = async (req, res) => {
 
     emailData.sender = {
       name: "StreamLink",
-      email: "mohan14532@gmail.com",
+      email: process.env.EMAIL_USER,
     };
 
     emailData.to = [

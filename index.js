@@ -34,6 +34,17 @@ app.get("/",(req,res)=> {
 })
 
 const PORT=process.env.PORT||5000
+const DBURL=process.env.DB_URL
+mongoose.connect(DBURL).then(()=>{
+    console.log("Mongodb connected")
+}).catch((error)=> {
+    console.log(error)
+})
+const server = http.createServer(app);
+initSocket(server);
+server.listen(PORT,  () =>{
+    console.log(`Server running on port ${PORT}`);
+});
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -49,14 +60,4 @@ app.use("/payment",RazorpayRoutes);
 app.use("/user", userRoutes);
 app.use("/downloads", downloadRoutes);
 
-const server = http.createServer(app);
-initSocket(server);
-server.listen(PORT,  () =>{
-    console.log(`Server running on port ${PORT}`);
-});
-const DBURL=process.env.DB_URL
-mongoose.connect(DBURL).then(()=>{
-    console.log("Mongodb connected")
-}).catch((error)=> {
-    console.log(error)
-})
+

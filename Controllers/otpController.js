@@ -53,7 +53,7 @@ export const sendOtp = async (req, res) => {
 
     emailData.sender = {
       name: "StreamLink",
-      email: "mohan14532@gmail.com",
+      email: process.env.EMAIL_USER,
     };
 
     emailData.to = [
@@ -68,7 +68,6 @@ export const sendOtp = async (req, res) => {
       success: true,
       message: "OTP Sent Successfully",
     });
-
   } catch (error) {
     console.log(error);
 
@@ -114,7 +113,6 @@ export const verifyOtp = async (req, res) => {
       success: true,
       message: "OTP Verified",
     });
-
   } catch (error) {
     console.log(error);
 
