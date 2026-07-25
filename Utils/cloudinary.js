@@ -1,5 +1,4 @@
 import { v2 as cloudinary } from "cloudinary";
-import streamifier from "streamifier";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -7,27 +6,34 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const uploadToCloudinary = (
-  buffer,
+
+export const uploadLargeToCloudinary = (
+  filePath,
   folder,
-  resourceType = "auto"
+  resourceType = "video"
 ) => {
+
   return new Promise((resolve, reject) => {
 
-    const stream = cloudinary.uploader.upload_stream(
+    cloudinary.uploader.upload_large(
+      filePath,
       {
         folder,
         resource_type: resourceType,
+        chunk_size: 6000000, // 6MB chunks
       },
+
       (error, result) => {
+
         if (error) {
           reject(error);
         } else {
           resolve(result);
         }
+
       }
     );
 
-    streamifier.createReadStream(buffer).pipe(stream);
   });
+
 };

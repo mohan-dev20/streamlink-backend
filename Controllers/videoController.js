@@ -1,5 +1,5 @@
 import Video from "../Modals/video.js";
-import { uploadToCloudinary } from "../Utils/cloudinary.js";
+import { uploadLargeToCloudinary } from "../Utils/cloudinary.js";
 
 export const getVideos = async (req, res) => {
   try {
@@ -13,13 +13,7 @@ export const getVideos = async (req, res) => {
 };
 export const uploadVideo = async (req, res) => {
   try {
-    const {
-      title,
-      description,
-      category,
-      duration,
-      userId,
-    } = req.body;
+    const { title, description, category, duration, userId } = req.body;
 
     if (!req.files?.video || !req.files?.thumbnail) {
       return res.status(400).json({
@@ -29,18 +23,19 @@ export const uploadVideo = async (req, res) => {
     }
 
     // Upload Thumbnail
-    const thumbnailResult = await uploadToCloudinary(
-      req.files.thumbnail[0].buffer,
+    const thumbnailResult = await uploadLargeToCloudinary(
+      req.files.thumbnail[0].path,
       "streamlink/thumbnails",
-      "image"
+      "image",
     );
 
-    // Upload Video
-    const videoResult = await uploadToCloudinary(
-      req.files.video[0].buffer,
+    const videoResult = await uploadLargeToCloudinary(
+      req.files.video[0].path,
       "streamlink/videos",
-      "video"
+      "video",
     );
+    fs.unlinkSync(req.files.video[0].path);
+    fs.unlinkSync(req.files.thumbnail[0].path);
 
     const views = Math.floor(Math.random() * 50000) + 500;
     const likes = Math.floor(views * (Math.random() * 0.08 + 0.03));
@@ -78,7 +73,10 @@ export const uploadVideo = async (req, res) => {
 };
 export const getVideoById = async (req, res) => {
   try {
-    const video = await Video.findById(req.params.id).populate("userId", "username profilePic subscribers");
+    const video = await Video.findById(req.params.id).populate(
+      "userId",
+      "username profilePic subscribers",
+    );
     if (!video) {
       return res.status(400).json({ message: "video not found" });
     }
@@ -152,7 +150,6 @@ export const deleteVideo = async (req, res) => {
       });
     }
 
-
     await Video.findByIdAndDelete(req.params.id);
 
     res.json({
@@ -170,7 +167,7 @@ export const increaseViews = async (req, res) => {
     const video = await Video.findByIdAndUpdate(
       req.params.id,
       { $inc: { views: 1 } },
-      { new: true }
+      { new: true },
     );
 
     res.json(video);
