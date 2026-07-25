@@ -85,7 +85,7 @@ support@streamlink.com
 
     // Send Email
     await transporter.sendMail({
-      from: `"StreamLink" <${process.env.EMAIL_USER}>`,
+      from: "StreamLink <mohan14532@gmail.com>",
       to: email,
       subject: "🔐 Your StreamLink Verification Code",
       html,
