@@ -4,11 +4,29 @@ export const sendInvoiceEmail = async (req, res) => {
   try {
     const { email, plan, amount } = req.body;
 
-    await transporter.sendMail({
-  from: `"StreamLink" <${process.env.BREVO_LOGIN}>`,
-  to: email,
-  subject: `🎉 ${plan} Plan Activated`,
-  html,
+   await brevo.post("/smtp/email", {
+  sender: {
+    name: "StreamLink",
+    email: "mohan14532@gmail.com",
+  },
+
+  to: [
+    {
+      email,
+    },
+  ],
+
+  subject: `${plan} Plan Activated`,
+
+  htmlContent: `
+    <h2>Payment Successful</h2>
+
+    <p>Plan: ${plan}</p>
+
+    <p>Amount: ₹${amount}</p>
+
+    <p>Thank you for upgrading to StreamLink Premium.</p>
+  `,
 });
     res.json({
       success: true,

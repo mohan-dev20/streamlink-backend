@@ -1,10 +1,12 @@
-import * as brevo from "@getbrevo/brevo";
+import axios from "axios";
 
-const apiInstance = new brevo.TransactionalEmailsApi();
+const brevo = axios.create({
+  baseURL: "https://api.brevo.com/v3",
+  headers: {
+    accept: "application/json",
+    "api-key": process.env.BREVO_API_KEY,
+    "content-type": "application/json",
+  },
+});
 
-apiInstance.setApiKey(
-  brevo.TransactionalEmailsApiApiKeys.apiKey,
-  process.env.BREVO_API_KEY
-);
-
-export default apiInstance;
+export default brevo;
