@@ -1,7 +1,5 @@
 import Video from "../Modals/video.js";
-import fs from "fs";
-import path from "path";
-import { uploadToCloudinary } from "../Utils/cloudinaryUpload.js";
+import { uploadToCloudinary } from "../Utils/cloudinary.js";
 
 export const getVideos = async (req, res) => {
   try {
@@ -38,7 +36,7 @@ export const uploadVideo = async (req, res) => {
     );
 
     // Upload Video
-    const videoResult = await cloudinary(
+    const videoResult = await uploadToCloudinary(
       req.files.video[0].buffer,
       "streamlink/videos",
       "video"
