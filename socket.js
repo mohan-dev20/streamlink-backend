@@ -9,6 +9,7 @@ export const initSocket = (server) => {
     origin: [
       "http://localhost:3000",
       "http://192.168.1.5:3000",
+       "https://streamlink-frontend.vercel.app",
     ],
     methods: ["GET", "POST"],
     credentials: true,
