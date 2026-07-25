@@ -1,9 +1,15 @@
 import express from "express";
 import { uploadVideo,getVideos,getVideoById,likeVideo,dislikeVideo,downloadVideo, getUserVideos, deleteVideo, increaseViews } from "../Controllers/videoController.js";
-
+import upload from "../Middleware/upload.js";
 const router = express.Router();
-
-router.post("/upload",uploadVideo );
+router.post(
+  "/upload",
+  upload.fields([
+    { name: "video", maxCount: 1 },
+    { name: "thumbnail", maxCount: 1 },
+  ]),
+  uploadVideo
+);
 router.get("/",getVideos);
 router.get("/:id",getVideoById)
 router.put("/:id/like",likeVideo);
