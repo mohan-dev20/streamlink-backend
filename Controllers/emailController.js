@@ -1,4 +1,4 @@
-import transporter from "../Utils/mailer.js";
+import brevo from "../Utils/brevo.js";
 
 export const sendInvoiceEmail = async (req, res) => {
   try {
