@@ -1,5 +1,6 @@
 import Otp from "../Modals/Otp.js";
 import transporter from "../Utils/mailer.js";
+
 export const sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
@@ -42,13 +43,14 @@ export const sendOtp = async (req, res) => {
       </div>
     </div>
     `;
+    await transporter.verify();
+console.log("SMTP Connected Successfully");
 await transporter.sendMail({
-  from: `"StreamLink" <${process.env.EMAIL_USER}>`,
+  from: `"StreamLink" <${process.env.BREVO_LOGIN}>`,
   to: email,
   subject: "🔐 StreamLink Verification OTP",
   html,
 });
-
     res.json({
       success: true,
       message: "OTP Sent Successfully",

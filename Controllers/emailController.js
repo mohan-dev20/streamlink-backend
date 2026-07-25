@@ -5,7 +5,7 @@ export const sendInvoiceEmail = async (req, res) => {
     const { email, plan, amount } = req.body;
 
     await transporter.sendMail({
-  from: `"StreamLink" <${process.env.EMAIL_USER}>`,
+  from: `"StreamLink" <${process.env.BREVO_LOGIN}>`,
   to: email,
   subject: `🎉 ${plan} Plan Activated`,
   html,
