@@ -1,5 +1,5 @@
 import User from "../Modals/Auth.js";
-import  uploadToCloudinary from "../Utils/cloudinaryUpload.js";
+import  {uploadToCloudinary} from "../Utils/cloudinaryUpload.js";
 
 export const updateProfile = async (req, res) => {
   try {
